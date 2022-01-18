@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vm</title>
+</head>
+<body>
+    <script>
+        const OPCODES = {
+            PUSH : 1001,
+            POP  : 1002,
+            ADD  : 1003,
+            SUB  : 1004,
+            MUL  : 1005,
+            DIV  : 1006,
+        };
+        var stack=[];
+        var codes=[];
+        function run1(){
+            stack=[];
+            while(codes.length>0){
+                switch(codes.shift()){
+                    case OPCODES.PUSH:
+                        stack.push(codes.shift());
+                        break;
+                    case OPCODES.POP:
+                        stack.pop();
+                        break;
+                    case OPCODES.ADD:
+                        stack.push(stack.pop()+stack.pop());
+                        break;
+                    case OPCODES.SUB:
+                        var x=stack.pop();
+                        stack.push(stack.pop()-x);
+                        break;
+                    case OPCODES.MUL:
+                        stack.push(stack.pop()*stack.pop());
+                        break;
+                    case OPCODES.DIV:
+                        var x=stack.pop();
+                        stack.push(stack.pop()/x);
+                        break;
+                }
+            }
+        }
+        console.time("elapsed");
+        for(var i=0;i<1000000;i++){
+            codes=[
+                OPCODES.PUSH,6,OPCODES.PUSH,2,OPCODES.ADD,
+                OPCODES.PUSH,6,OPCODES.PUSH,2,OPCODES.SUB,
+                OPCODES.PUSH,6,OPCODES.PUSH,2,OPCODES.MUL,
+                OPCODES.PUSH,6,OPCODES.PUSH,2,OPCODES.DIV,
+            ];
+            run1();
+        }
+        console.log(stack);
+        console.timeEnd("elapsed");
+    </script>
+</body>
+</html>
